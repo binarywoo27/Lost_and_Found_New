@@ -29,6 +29,20 @@ public class BoardController {
 		return "list";
 	}
 	
+	@RequestMapping(value= "/list_found", method = RequestMethod.GET)
+	public String boardlist_found(Model model) {
+		model.addAttribute("list",boardService.getBoardList());
+		return "list_found";
+	}
+	
+	@RequestMapping(value= "/list_lost", method = RequestMethod.GET)
+	public String boardlist_lost(Model model) {
+		model.addAttribute("list",boardService.getBoardList());
+		return "list_lost";
+	}
+	
+	
+	
 	@RequestMapping(value = "/my_page", method = RequestMethod.GET)
 	public String myPage() {
 		return "my_page";
