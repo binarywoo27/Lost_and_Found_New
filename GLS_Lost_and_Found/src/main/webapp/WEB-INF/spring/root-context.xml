@@ -2,29 +2,46 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
-	
+
 	<!-- Root Context: defines shared resources visible to all other web components -->
-	<bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-<!-- 		<property name="url" value="jdbc:mysql://db4free.net:3306/yohansdb" />
-		<property name="username" value="syh3000" />
-		<property name="password" value="12345abcd" /> -->
-		
-		
-		<property name="url" value="jdbc:mysql://203.252.112.29:3306/gls_db?serverTimezone=UTC" />
+	<bean name="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver" />
+		<!-- <property name="url" value="jdbc:mysql://db4free.net:3306/yohansdb" 
+			/> <property name="username" value="syh3000" /> <property name="password" 
+			value="12345abcd" /> -->
+
+
+		<property name="url"
+			value="jdbc:mysql://203.252.112.29:3306/gls_db?serverTimezone=UTC" />
 		<property name="username" value="gls_db" />
-		<property name="password" value="gls12345a" /> 
-		
+		<property name="password" value="gls12345a" />
+
 	</bean>
-	
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
-		<property name="configLocation" value="classpath:mybatis-config.xml" />
-		<property name="mapperLocations" value="classpath:mappers/*-mapper.xml" />
+		<property name="configLocation"
+			value="classpath:mybatis-config.xml" />
+		<property name="mapperLocations"
+			value="classpath:mappers/*-mapper.xml" />
 	</bean>
-	
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
-		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+
+	<bean id="sqlSession"
+		class="org.mybatis.spring.SqlSessionTemplate"
+		destroy-method="clearCache">
+		<constructor-arg name="sqlSessionFactory"
+			ref="sqlSessionFactory" />
 	</bean>
-		
+
+	<!-- Spring File Upload Configuration -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- Maximum Upload Size (In Bytes) - 20 MB -->
+        <property name="maxUploadSize" value="20971520" />
+        <!-- Maximum Size Of The File In Memory (In Bytes) - 10 MB-->
+        <property name="maxInMemorySize" value="1048576" />
+    </bean>
+
 </beans>
