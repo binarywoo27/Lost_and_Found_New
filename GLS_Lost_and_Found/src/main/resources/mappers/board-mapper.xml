@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Board">
 	<insert id="insertBoard">
-		insert into LF_Product_Test (category, title, lost_found_date, writer, lost, content, feature, photourl)
+		insert into LF_Product_Test (category, title, lost_found_date, writer, lost, content, feature, file_data)
 		values
-		(#{category}, #{title}, #{lost_found_date}, #{writer}, #{lost}, #{content}, #{feature}, #{photourl})
+		(#{category}, #{title}, #{lost_found_date}, #{writer}, #{lost}, #{content}, #{feature}, #{file_data})
 	</insert>
 	<update id="updateBoard">
 		update LF_Product_Test
 		set title=#{title}, content=#{content},
-		writer=#{writer}, category=#{category}, photourl=#{photourl}, lost_found_date=#{lost_found_date},
+		writer=#{writer}, category=#{category}, file_data=#{file_data}, lost_found_date=#{lost_found_date},
 		lost=#{lost}, feature=#{feature}
 		where seq=#{seq}
 	</update>

@@ -11,6 +11,12 @@
 <link rel="stylesheet" href="${path}/resources/css/style.css">
 </head>
 <body>
+<script>
+function changeformat(){
+  document.getElementById("customFile").files,
+  
+}
+</script>
 
 	<h1>새 물품 등록하기</h1>
 	<form action="addok" method="post" enctype="multipart/form-data">
@@ -31,7 +37,7 @@
 			</tr>
 			<tr>
 				<td id="definition">사진 첨부</td>
-				<td><input name="file" type="file" class="custom-file-input" id="customFile"></td>
+				<td><input name="file_data" type="file" class="custom-file-input" id="customFile" multiple="multiple"></td>
 			</tr>
 			<tr>
 				<td id="definition">분실/습득 날짜</td>

@@ -212,7 +212,7 @@ function init(){
 			<div class="card">
 				<div class="seq">${u.seq}</div>
 				<div class="image">
-					<img src=${u.photourl
+					<img src=${u.file_data
 									}
 						style="box-sizing: border-box; width: 100%; height: 230px" />
 				</div>

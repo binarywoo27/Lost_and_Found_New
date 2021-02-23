@@ -11,9 +11,12 @@ public class BoardVO {
 	private String content;
 	private Date regdate;
 	private String lost_found_date;  // new
-	private String photourl;
 	private String feature; // new
+	private byte[] file_data;      // for file
 	private int cnt;
+	
+//	private String photourl;
+//  private String fileName;  // for file
 	
 	public int getSeq() {
 		return seq;
@@ -63,17 +66,17 @@ public class BoardVO {
 	public void setLost_found_date(String lost_found_date) {
 		this.lost_found_date = lost_found_date;
 	}
-	public String getPhotourl() {
-		return photourl;
-	}
-	public void setPhotourl(String photourl) {
-		this.photourl = photourl;
-	}
 	public String getFeature() {
 		return feature;
 	}
 	public void setFeature(String feature) {
 		this.feature = feature;
+	}
+	public byte[] getFile_data() {
+		return file_data;
+	}
+	public void setFile_data(byte[] file_data) {
+		this.file_data = file_data;
 	}
 	public int getCnt() {
 		return cnt;
@@ -81,6 +84,9 @@ public class BoardVO {
 	public void setCnt(int cnt) {
 		this.cnt = cnt;
 	}
+	
+	
+	
  
 	
 }
