@@ -1,23 +1,26 @@
 package com.gls.winter;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class BoardVO {
+import org.springframework.web.multipart.MultipartFile;
+
+public class BoardVO implements Serializable{
+	
+	private static final long serialVersionUID = 74458L;
+	
 	private int seq;
 	private String category;
 	private String title;
-	private String writer; // 우선 닉네임 없이 아이디로
-	private boolean lost;   // new
-	private String content;
+	private String writer;   // 우선 닉네임 없이 아이디로
+	private boolean lost;    // new
+	private String content;  
 	private Date regdate;
 	private String lost_found_date;  // new
 	private String feature; // new
-	private byte[] file_data;      // for file
+	private String photourl;  // 파일인 경우 파일 경로 / 인터넷 상의 사진인 경우 url
+	private MultipartFile photofile;
 	private int cnt;
-	
-//	private String photourl;
-//  private String fileName;  // for file
-	
 	public int getSeq() {
 		return seq;
 	}
@@ -72,11 +75,17 @@ public class BoardVO {
 	public void setFeature(String feature) {
 		this.feature = feature;
 	}
-	public byte[] getFile_data() {
-		return file_data;
+	public String getPhotourl() {
+		return photourl;
 	}
-	public void setFile_data(byte[] file_data) {
-		this.file_data = file_data;
+	public void setPhotourl(String photourl) {
+		this.photourl = photourl;
+	}
+	public MultipartFile getPhotofile() {
+		return photofile;
+	}
+	public void setPhotofile(MultipartFile photofile) {
+		this.photofile = photofile;
 	}
 	public int getCnt() {
 		return cnt;
@@ -84,9 +93,14 @@ public class BoardVO {
 	public void setCnt(int cnt) {
 		this.cnt = cnt;
 	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	
 	
+//  private byte[] file_data;      // for file
+//  private String fileName;  // for file - 필요없을듯?
 	
- 
 	
+
 }

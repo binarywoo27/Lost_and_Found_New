@@ -209,7 +209,8 @@ div.description {
 
 	<table id="list" width="90%">
 		<c:forEach items="${list}" var="u">
-			<c:if test="${!u.lost}"> <!-- u.lost가 0인 경우 == lost인 경우 -->
+			<c:if test="${!u.lost}">
+				<!-- u.lost가 0인 경우 == lost인 경우 -->
 				<div class="card">
 					<div class="seq">${u.seq}</div>
 					<div class="image">
@@ -219,7 +220,8 @@ div.description {
 					</div>
 					<div class="description">
 
-						<span style="background-color:#F1CBC2; padding:1.5px 3px; border-radius: 3px;">Lost</span>
+						<span
+							style="background-color: #F1CBC2; padding: 1.5px 3px; border-radius: 3px;">Lost</span>
 
 						<span class="title">${u.title}</span>
 
@@ -249,6 +251,8 @@ div.description {
 				</div>
 
 			</c:if>
+
+
 		</c:forEach>
 	</table>
 

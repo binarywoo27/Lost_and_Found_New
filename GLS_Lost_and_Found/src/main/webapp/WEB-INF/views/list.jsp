@@ -25,6 +25,20 @@
     if (a)
       location.href = 'deleteok/' + id;
   }
+
+  <c:if test="${process_result == 'write success'}">
+  alert("작성하신 글이 정상적으로 등록되었습니다.");
+  </c:if> // 쓰기 메세지 처리
+
+  <c:if test="${process_result == 'update success'}">
+  alert("글 수정이 정상적으로 처리되었습니다.");
+  </c:if> // 수 메세지 처리
+
+  <c:if test="${process_result == 'delete success'}">
+  alert("글 삭제가 정상적으로 처리되었습니다.");
+  </c:if> // 삭제 메세지 처리
+  
+  
 </script>
 
 
@@ -87,13 +101,12 @@ div.description {
 	padding: 10px;
 }
 
-#desc1 {	
+#desc1 {
 	font-size: 20px;
 	text-align: left;
 	font-weight: 700;
 	padding-left: 5%;
 }
-
 
 @media only screen and (min-width: 520px) {
 	div.card {
@@ -112,70 +125,72 @@ div.description {
 		width: 22%;
 	}
 }
-
-
-
 </style>
 
 </head>
-<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>	
+<script src="https://apis.google.com/js/platform.js?onload=init" async
+	defer></script>
 <script>
-//auth2 is initialized with gapi.auth2.init() and a user is signed in.
-function checkLoginStatus() {
-	var loginBtn = document.querySelector('#loginBtn');
-	var nameTxt = document.querySelector('#name');
-	
-	if(gauth.isSignedIn.get()){
-		console.log('logged in');
-		loginBtn.value = "Logout";
-		var profile = gauth.currentUser.get().getBasicProfile();
-		nameTxt.innerHTML = 'Welcome <strong>'+ profile.getName()+ '</strong>';
-	}
-	else{
-		console.log('logged out');
-		loginBtn.value = 'Login';
-		nameTxt.innerHTML = '';
-	}
-}
+  //auth2 is initialized with gapi.auth2.init() and a user is signed in.
+  function checkLoginStatus() {
+    var loginBtn = document.querySelector('#loginBtn');
+    var nameTxt = document.querySelector('#name');
 
-function init(){
-	console.log('init');
-	gapi.load('auth2', function(){
-		console.log('auth2');
-		window.gauth = gapi.auth2.init({
-			client_id: '60396027837-iev9qsg4ud3cb4plotgs65c6co5q9si9.apps.googleusercontent.com'
-		});
+    if (gauth.isSignedIn.get()) {
+      console.log('logged in');
+      loginBtn.value = "Logout";
+      var profile = gauth.currentUser.get().getBasicProfile();
+      nameTxt.innerHTML = 'Welcome _$tag___' + profile.getName() + '_$tag____';
+    } else {
+      console.log('logged out');
+      loginBtn.value = 'Login';
+      nameTxt.innerHTML = '';
+    }
+  }
 
-		gauth.then(function(){
-			console.log("googleAuth success");
-			checkLoginStatus();
+  function init() {
+    console.log('init');
+    gapi
+        .load(
+            'auth2',
+            function() {
+              console.log('auth2');
+              window.gauth = gapi.auth2
+                  .init({
+                    client_id : '60396027837-iev9qsg4ud3cb4plotgs65c6co5q9si9.apps.googleusercontent.com'
+                  });
 
-			if (gauth.isSignedIn.get()) {
-			  var profile = gauth.currentUser.get().getBasicProfile();
-			  console.log('ID: ' + profile.getId());
-			  console.log('Full Name: ' + profile.getName());
-			  console.log('Given Name: ' + profile.getGivenName());
-			  console.log('Family Name: ' + profile.getFamilyName());
-			  console.log('Image URL: ' + profile.getImageUrl());
-			  console.log('Email: ' + profile.getEmail());
-			}
-		}, function(){
-			console.log("googleAuth fail");
+              gauth.then(function() {
+                console.log("googleAuth success");
+                checkLoginStatus();
 
-		});
-	});
-	/* document.addEventListener("DOMContentLoaded", function(event) { 
-	  	document.getElementById("loginBtn").value = "Logout";
-	}); */
-	document.getElementById("loginBtn").value = "Logout";
-}
-/* function changeBtnValue(){
-	document.getElementById("loginBtn").value = "Logout";
-} */
+                if (gauth.isSignedIn.get()) {
+                  var profile = gauth.currentUser.get().getBasicProfile();
+                  console.log('ID: ' + profile.getId());
+                  console.log('Full Name: ' + profile.getName());
+                  console.log('Given Name: ' + profile.getGivenName());
+                  console.log('Family Name: ' + profile.getFamilyName());
+                  console.log('Image URL: ' + profile.getImageUrl());
+                  console.log('Email: ' + profile.getEmail());
+                }
+              }, function() {
+                console.log("googleAuth fail");
+
+              });
+            });
+    /* document.addEventListener("DOMContentLoaded", function(event) { 
+      	document.getElementById("loginBtn").value = "Logout";
+    }); */
+    document.getElementById("loginBtn").value = "Logout";
+  }
+  /* function changeBtnValue(){
+   document.getElementById("loginBtn").value = "Logout";
+   } */
 </script>
 
 <body onload="changeBtnValue()">
-<input type="button" id="loginBtn" value="checking..." onclick="
+	<input type="button" id="loginBtn" value="checking..."
+		onclick="
 	if(this.value === 'Login'){
 		gauth.signIn().then(function(){
 			console.log('signed in');
@@ -191,20 +206,20 @@ function init(){
 	
 ">
 
-<span id="name"> </span>
+	<span id="name"> </span>
 	<%
 		//out.write("<h1> hi there </h1>");
-		if(session.getAttribute("userid") == null){
-			out.write("<location.href ='../login/login'>");
-			/* out.write("<h1> hi there </h1>"); */	
-		}else {
-			String userid = (String)session.getAttribute("userid");
-			out.write("<span> welcome" + "<strong> " + userid + "</strong> </span>");
-		}
+	if (session.getAttribute("userid") == null) {
+		out.write("<location.href ='../login/login'>");
+		/* out.write("<h1> hi there </h1>"); */
+	} else {
+		String userid = (String) session.getAttribute("userid");
+		out.write("<span> welcome" + "<strong> " + userid + "</strong> </span>");
+	}
 	%>
 	<%@include file="./modules/header.jsp"%>
 	<%@include file="./modules/navbar.jsp"%>
-	
+
 
 	<table id="list" width="90%">
 		<c:forEach items="${list}" var="u">
@@ -212,26 +227,33 @@ function init(){
 			<div class="card">
 				<div class="seq">${u.seq}</div>
 				<div class="image">
-					<img src=${u.file_data
-									}
+				
+					<img src="${pageContext.request.contextPath}/resources/upload/${u.photourl}"
 						style="box-sizing: border-box; width: 100%; height: 230px" />
 				</div>
-				<div class="description">					
-					
+				<div class="description">
+
 					<script>
-					var lf = ${u.lost};
-					if(lf) document.write ( '<span style="background-color:#CBECBB; padding:1.5px 3px; border-radius: 3px;">Found</span>' );
-					else document.write ( '<span style="background-color:#F1CBC2; padding:1.5px 3px; border-radius: 3px;">Lost</span>' );
-					</script>
-					
-					 <span class="title">${u.title}</span>
+            var lf = $
+            {
+              u.lost
+            };
+            if (lf)
+              document
+                  .write('<span style="background-color:#CBECBB; padding:1.5px 3px; border-radius: 3px;">Found</span>');
+            else
+              document
+                  .write('<span style="background-color:#F1CBC2; padding:1.5px 3px; border-radius: 3px;">Lost</span>');
+          </script>
+
+					<span class="title">${u.title}</span>
 
 					<div class="name">상품명 : ${u.category}</div>
 
 					<div class="price">가격 : ${u.writer}</div>
 
 					<div class="other" style="box-sizing: border-box; height: 50px;">비고
-						: ${u.content}</div>
+						: ${u.content} </div>
 
 					<div class="regdate">작성일자 : ${u.regdate}</div>
 

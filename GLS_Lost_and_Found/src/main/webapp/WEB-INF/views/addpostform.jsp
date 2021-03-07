@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <c:set var="path" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html>
@@ -19,7 +21,7 @@ function changeformat(){
 </script>
 
 	<h1>새 물품 등록하기</h1>
-	<form action="addok" method="post" enctype="multipart/form-data">
+	<form:form commandName="vo" action="addok" method="post" enctype="multipart/form-data">
 		<table id="list">
 			<tr>
 				<td id="definition">Lost/Found</td>
@@ -37,7 +39,7 @@ function changeformat(){
 			</tr>
 			<tr>
 				<td id="definition">사진 첨부</td>
-				<td><input name="file_data" type="file" class="custom-file-input" id="customFile" multiple="multiple"></td>
+				<td><input name="photofile" type="file" class="form-control" id="photofile" required="required"></td>
 			</tr>
 			<tr>
 				<td id="definition">분실/습득 날짜</td>
@@ -61,7 +63,7 @@ function changeformat(){
 		<br />
 		<button type="button" id="cancelButton" onclick="history.back()">목록보기</button>
 		<button type="submit" id="registerButton">등록하기</button>
-	</form>
+	</form:form>
 
 </body>
 </html>

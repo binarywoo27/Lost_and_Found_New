@@ -205,11 +205,13 @@ div.description {
 	%>
 	<%@include file="./modules/header.jsp"%>
 	<%@include file="./modules/navbar.jsp"%>
+	
 
 
 	<table id="list" width="90%">
 		<c:forEach items="${list}" var="u">
-			<c:if test="${u.lost}"> <!-- u.lost가 1인 경우 == found인 경우 -->
+			<c:if test="${u.lost}">
+				<!-- u.lost가 1인 경우 == found인 경우 -->
 				<div class="card">
 					<div class="seq">${u.seq}</div>
 					<div class="image">
@@ -227,7 +229,7 @@ div.description {
 
 						<div class="price">가격 : ${u.writer}</div>
 
-						<div class="other" style="box-sizing: border-box; height: 50px;">비고
+						<div class="other" style="box-sizing: border-box; height: 80px;">비고
 							: ${u.content}</div>
 
 						<div class="regdate">작성일자 : ${u.regdate}</div>
@@ -247,8 +249,9 @@ div.description {
 
 
 				</div>
-
 			</c:if>
+
+
 		</c:forEach>
 	</table>
 

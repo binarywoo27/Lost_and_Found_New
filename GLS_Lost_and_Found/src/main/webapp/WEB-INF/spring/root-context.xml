@@ -36,12 +36,12 @@
 			ref="sqlSessionFactory" />
 	</bean>
 
-	<!-- Spring File Upload Configuration -->
+	<!-- Spring File Upload Configuration 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <!-- Maximum Upload Size (In Bytes) - 20 MB -->
+        Maximum Upload Size (In Bytes) - 20 MB
         <property name="maxUploadSize" value="20971520" />
-        <!-- Maximum Size Of The File In Memory (In Bytes) - 10 MB-->
+        Maximum Size Of The File In Memory (In Bytes) - 10 MB
         <property name="maxInMemorySize" value="1048576" />
-    </bean>
+    </bean> -->
 
 </beans>
