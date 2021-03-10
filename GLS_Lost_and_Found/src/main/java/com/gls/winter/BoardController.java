@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gls.winter.file.FileUtil;
+import com.gls.winter.page.Pagination;
 
 @Controller
 @RequestMapping(value = "/board")
@@ -43,22 +44,35 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String boardlist(Model model) {
-		model.addAttribute("list", boardService.getBoardList());
+	public String boardlist(Model model, 
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "1") int range) throws Exception {
+		// 페이징 계산을 위해 Pagination 클래스에 보내야 할 파라미터에는 '현재 페이지'와 '현재 페이지 범위', 그리고 '게시물의 총
+		// 개수'가 있다.
+
+		// 전체 게시글 개수
+		int listCnt = boardService.getBoardListCnt();
+
+		// Pagination 객체생성
+		Pagination pagination = new Pagination();
+		pagination.pageInfo(page, range, listCnt);
+		
+		model.addAttribute("pagination", pagination);
+		model.addAttribute("list", boardService.getBoardList(pagination));
 		return "list";
 	}
 
-	@RequestMapping(value = "/list_found", method = RequestMethod.GET)
-	public String boardlist_found(Model model) {
-		model.addAttribute("list", boardService.getBoardList());
-		return "list_found";
-	}
-
-	@RequestMapping(value = "/list_lost", method = RequestMethod.GET)
-	public String boardlist_lost(Model model) {
-		model.addAttribute("list", boardService.getBoardList());
-		return "list_lost";
-	}
+//	@RequestMapping(value = "/list_found", method = RequestMethod.GET)
+//	public String boardlist_found(Model model) {
+//		model.addAttribute("list", boardService.getBoardList());
+//		return "list_found";
+//	}
+//
+//	@RequestMapping(value = "/list_lost", method = RequestMethod.GET)
+//	public String boardlist_lost(Model model) {
+//		model.addAttribute("list", boardService.getBoardList());
+//		return "list_lost";
+//	}
 
 	@RequestMapping(value = "/my_page", method = RequestMethod.GET)
 	public String myPage() {
@@ -81,51 +95,49 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/addok", method = RequestMethod.POST)
-	public String addPostOK(HttpServletRequest servletRequest, @ModelAttribute BoardVO vo, Model model, RedirectAttributes rttr) throws IllegalStateException, IOException {
-		
+	public String addPostOK(HttpServletRequest servletRequest, @ModelAttribute BoardVO vo, Model model,
+			RedirectAttributes rttr) throws IllegalStateException, IOException {
 
 		MultipartFile file = vo.getPhotofile(); // 파일 가져와라
 		String fileName; // 파일 이름 저장 변수
-		
-		if(file != null) { // 파일이 있다면
-			
+
+		if (file != null) { // 파일이 있다면
+
 			fileName = file.getOriginalFilename(); // 파일 이름 저장 변수에 파일 이름 저장
-			
-			String realPath = servletRequest.getSession().getServletContext().getRealPath("/resources/upload/"); 
-			// 이 (상대)경로에 저장할 수 있도록 / 실제 서버의 위치를 모르기 때문에 webapp 기준으로 상대경로로 접근한다. 이렇게 하면 루트부터 full path를 가져온다.  
-			
-			File dir = new File(realPath); 
-			if(!dir.exists()) dir.mkdir(); // 폴더 생성
+
+			String realPath = servletRequest.getSession().getServletContext().getRealPath("/resources/upload/");
+			// 이 (상대)경로에 저장할 수 있도록 / 실제 서버의 위치를 모르기 때문에 webapp 기준으로 상대경로로 접근한다. 이렇게 하면 루트부터
+			// full path를 가져온다.
+
+			File dir = new File(realPath);
+			if (!dir.exists())
+				dir.mkdir(); // 폴더 생성
 			System.out.println("DEBUG: " + realPath + fileName); // 확인용
-			
+
 			// 저장하려는 파일시스템의 실제 위경로와 파일 이름을 주고 중복 파일이 존재하는지 여부 체크
 			String saveFileName = FileUtil.checkDuplicate(realPath + fileName);
 			System.out.println("DEBUG: " + saveFileName); // 확인용
-			
-			
-			File imagefile = new File(saveFileName); // 중복값 제거한 이름의 파일 생성 
-			
+
+			File imagefile = new File(saveFileName); // 중복값 제거한 이름의 파일 생성
+
 			// File imageFile = new File(realPath, filename);
-			
-            try
-            {
-            	file.transferTo(imagefile); // 실질적으로 서버에 파일 저장
-            	
-            	// 서버에 올라간 파일명만 가져오기 - path는 없음
-            	String uploadFileName = saveFileName.substring(saveFileName.lastIndexOf("/")+1);
-            	System.out.println("DEBUG: " + uploadFileName); // 확인용
-            	
-            	// DB에 정보 저장
-            	
-            	vo.setPhotourl(uploadFileName);
-            	// vo.setPhotourl("/winter/resources/upload/" + uploadFileName);
-            	
-            } catch (IOException e) 
-            {
-                e.printStackTrace();
-            }
+
+			try {
+				file.transferTo(imagefile); // 실질적으로 서버에 파일 저장
+
+				// 서버에 올라간 파일명만 가져오기 - path는 없음
+				String uploadFileName = saveFileName.substring(saveFileName.lastIndexOf("/") + 1);
+				System.out.println("DEBUG: " + uploadFileName); // 확인용
+
+				// DB에 정보 저장
+
+				vo.setPhotourl(uploadFileName);
+				// vo.setPhotourl("/winter/resources/upload/" + uploadFileName);
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		
 
 		// String path = "/upload/image/";
 //
@@ -166,7 +178,7 @@ public class BoardController {
 			System.out.println("데이터 추가 성공!!");
 			rttr.addFlashAttribute("process_result", "write success");
 		}
-		
+
 		// model.addAttribute("u", vo);
 		return "redirect:list";
 	}

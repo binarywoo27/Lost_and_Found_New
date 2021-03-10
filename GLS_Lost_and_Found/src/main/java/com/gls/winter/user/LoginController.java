@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.gls.winter.BoardService;
+import com.gls.winter.page.Pagination;
 
 @Controller
 @RequestMapping(value = "/login")
@@ -32,7 +33,7 @@ public class LoginController {
 //	public String login() {
 //		return "login";
 //	}
-	@RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
 	public String login(String t, Model model) {
 
 //		/* 구글code 발행 */
@@ -48,12 +49,25 @@ public class LoginController {
 
 	// 구글 Callback호출 메소드
 	@RequestMapping(value = "/oauth2callback", method = RequestMethod.GET)
-	public String googleCallback(HttpSession session, Model model, @RequestParam(required = false) HttpServletRequest request)
-			throws IOException {
+	public String googleCallback(HttpSession session, Model model,
+			@RequestParam(required = false) HttpServletRequest request,
+			@RequestParam(required = false, defaultValue = "1") int page
+
+			, @RequestParam(required = false, defaultValue = "1") int range) throws IOException {
 		System.out.println("googleCallback: Google login success");
-		model.addAttribute("list", boardService.getBoardList());
-		
-		return "list"; 
+
+		// 전체 게시글 개수
+		int listCnt = boardService.getBoardListCnt();
+
+		// Pagination 객체생성
+		Pagination pagination = new Pagination();
+		pagination.pageInfo(page, range, listCnt);
+
+		model.addAttribute("pagination", pagination);
+//		model.addAttribute("list", boardService.getBoardList());
+		model.addAttribute("list", boardService.getBoardList(pagination));
+
+		return "list";
 	}
 
 	@RequestMapping(value = "/loginOk", method = RequestMethod.POST)
@@ -67,12 +81,12 @@ public class LoginController {
 		session.setAttribute("userid", userid);
 		session.setAttribute("username", username);
 		System.out.println(username);
-		
+
 		UserVO loginvo = service.getUser(vo);
 		if (loginvo != null) {
 			System.out.println("로그인 성공!");
 			session.setAttribute("login", loginvo);
-			
+
 			returnURL = "redirect:/board/list";
 		} else {
 			System.out.println("로그인 실패!");

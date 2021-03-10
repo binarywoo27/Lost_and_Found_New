@@ -3,6 +3,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gls.winter.page.Pagination;
+
 @Service 
 public class BoardServiceImpl implements BoardService{
 	
@@ -30,7 +32,13 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public List<BoardVO> getBoardList() {
-		return boardDAO.getBoardList();
+	public List<BoardVO> getBoardList(Pagination pagination) {
+		return boardDAO.getBoardList(pagination);
 	}
+	
+	@Override
+	public int getBoardListCnt() { // throws Exception {
+		return boardDAO.getBoardListCnt();
+	}
+
 }

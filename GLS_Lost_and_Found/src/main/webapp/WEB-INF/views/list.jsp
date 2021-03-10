@@ -37,8 +37,39 @@
   <c:if test="${process_result == 'delete success'}">
   alert("글 삭제가 정상적으로 처리되었습니다.");
   </c:if> // 삭제 메세지 처리
-  
-  
+
+  //이전 버튼 이벤트
+  function fn_prev(page, range, rangeSize) {
+    var page = ((range - 2) * rangeSize) + 1;
+    var range = range - 1;
+
+    var url = "${pageContext.request.contextPath}/board/getBoardList";
+    url = url + "?page=" + page;
+    url = url + "&range=" + range;
+
+    location.href = url;
+  }
+
+  //페이지 번호 클릭
+  function fn_pagination(page, range, rangeSize, searchType, keyword) {
+    var url = "${pageContext.request.contextPath}/board/getBoardList"
+    url = url + "?page=" + page;
+    url = url + "&range=" + range;
+
+    location.href = url;
+  }
+
+  //다음 버튼 이벤트
+  function fn_next(page, range, rangeSize) {
+    var page = parseInt((range * rangeSize)) + 1;
+    var range = parseInt(range) + 1;
+
+    var url = "${pageContext.request.contextPath}/board/getBoardList";
+    url = url + "?page=" + page;
+    url = url + "&range=" + range;
+
+    location.href = url;
+  }
 </script>
 
 
@@ -227,8 +258,9 @@ div.description {
 			<div class="card">
 				<div class="seq">${u.seq}</div>
 				<div class="image">
-				
-					<img src="${pageContext.request.contextPath}/resources/upload/${u.photourl}"
+
+					<img
+						src="${pageContext.request.contextPath}/resources/upload/${u.photourl}"
 						style="box-sizing: border-box; width: 100%; height: 230px" />
 				</div>
 				<div class="description">
@@ -253,7 +285,7 @@ div.description {
 					<div class="price">가격 : ${u.writer}</div>
 
 					<div class="other" style="box-sizing: border-box; height: 50px;">비고
-						: ${u.content} </div>
+						: ${u.content}</div>
 
 					<div class="regdate">작성일자 : ${u.regdate}</div>
 
@@ -325,6 +357,34 @@ div.description {
 	</div>
  --%>
 	<br>
+
+	<!-- pagination{s} -->
+
+	<div id="paginationBox">
+		<ul class="pagination">
+			<c:if test="${pagination.prev}">
+				<li class="page-item"><a class="page-link" href="#"
+					onClick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">Previous</a></li>
+			</c:if>
+
+
+			<c:forEach begin="${pagination.startPage}"
+				end="${pagination.endPage}" var="idx">
+				<li
+					class="page-item <c:out value="${pagination.page == idx ? 'active' : ''}"/> "><a
+					class="page-link" href="#"
+					onClick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')">
+						${idx} </a></li>
+			</c:forEach>
+
+			<c:if test="${pagination.next}">
+				<li class="page-item"><a class="page-link" href="#"
+					onClick="fn_next('${pagination.range}', '${pagination.range}', '${pagination.rangeSize}')">Next</a></li>
+			</c:if>
+		</ul>
+	</div>
+	<!-- pagination{e} -->
+	
 	<br>
 
 	<%@include file="./modules/footer.jsp"%>
