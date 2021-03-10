@@ -360,7 +360,7 @@ div.description {
 
 	<!-- pagination{s} -->
 
-	<div id="paginationBox">
+	<div id="paginationBox"  align="center"">
 		<ul class="pagination">
 			<c:if test="${pagination.prev}">
 				<li class="page-item"><a class="page-link" href="#"

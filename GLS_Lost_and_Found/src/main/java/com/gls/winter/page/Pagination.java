@@ -13,7 +13,7 @@ public class Pagination {
 	private int listCnt;     // 전체 게시물의 개수
 	private int pageCnt;     // 전체 페이지 범위의 개수
 	private int startPage;   // 범위 내 시작 페이지
-	private int startList;   // 
+	private int startList;   // 게시판 시작 번호
 	private int endPage;     // 범위 내 끝 페이지 
 	private boolean prev;    // 이전 페이지
 	private boolean next;    // 다음 페이지

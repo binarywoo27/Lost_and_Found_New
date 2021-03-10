@@ -50,10 +50,7 @@ public class LoginController {
 	// 구글 Callback호출 메소드
 	@RequestMapping(value = "/oauth2callback", method = RequestMethod.GET)
 	public String googleCallback(HttpSession session, Model model,
-			@RequestParam(required = false) HttpServletRequest request,
-			@RequestParam(required = false, defaultValue = "1") int page
-
-			, @RequestParam(required = false, defaultValue = "1") int range) throws IOException {
+			@RequestParam(required = false) HttpServletRequest request ) throws IOException {
 		System.out.println("googleCallback: Google login success");
 
 		// 전체 게시글 개수
@@ -61,7 +58,7 @@ public class LoginController {
 
 		// Pagination 객체생성
 		Pagination pagination = new Pagination();
-		pagination.pageInfo(page, range, listCnt);
+		pagination.pageInfo(1, 1, listCnt);
 
 		model.addAttribute("pagination", pagination);
 //		model.addAttribute("list", boardService.getBoardList());
