@@ -6,6 +6,7 @@
 		values
 		(#{category}, #{title}, #{lost_found_date}, #{writer}, #{lost}, #{content}, #{feature}, #{photourl})
 	</insert>
+	
 	<update id="updateBoard">
 		update LF_Product_Test
 		set title=#{title}, content=#{content},
@@ -13,9 +14,11 @@
 		lost=#{lost}, feature=#{feature}
 		where seq=#{seq}
 	</update>
+	
 	<delete id="deleteBoard">
 		delete from LF_Product_Test where seq=#{seq}
 	</delete>
+	
 	<select id="getBoard" resultType="board">
 		select * from LF_Product_Test where
 		seq=#{seq}
@@ -26,10 +29,11 @@
 			* 
 		FROM 
 			LF_Product_Test 
-		LIMIT
+ 		LIMIT
 			#{startList}, #{listSize}
 			
-		<!-- order by seq desc -->
+	    <!-- ORDER by seq DESC -->
+		
 	</select>
 	
 	<select id="getBoardListFound" resultType="board">
