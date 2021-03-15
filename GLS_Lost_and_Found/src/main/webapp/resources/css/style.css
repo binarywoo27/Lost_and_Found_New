@@ -15,7 +15,7 @@
 }
 
 #list tr:hover {
-	background-color: #ddd;
+	background-color: skyblue;
 }
 
 #list th, #definition   {
@@ -86,5 +86,5 @@
 }
 
 #list th, #definition {
-	background-color: darkslategray;
+	background-color: skyblue;
 }
