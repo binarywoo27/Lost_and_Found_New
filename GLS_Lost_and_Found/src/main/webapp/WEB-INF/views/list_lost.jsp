@@ -25,6 +25,41 @@
     if (a)
       location.href = 'deleteok/' + id;
   }
+
+
+
+//이전 버튼 이벤트
+  function fn_prev(page, range, rangeSize) {
+    var page = ((range - 2) * rangeSize) + 1;
+    var range = range - 1;
+
+    var url = "${pageContext.request.contextPath}/board/list_lost";
+    url = url + "?page=" + page;
+    url = url + "&range=" + range;
+
+    location.href = url;
+  }
+
+  //페이지 번호 클릭
+  function fn_pagination(page, range, rangeSize, searchType, keyword) {
+    var url = "${pageContext.request.contextPath}/board/list_lost"
+    url = url + "?page=" + page;
+    url = url + "&range=" + range;
+
+    location.href = url;
+  }
+
+  //다음 버튼 이벤트
+  function fn_next(page, range, rangeSize) {
+    var page = parseInt((range * rangeSize)) + 1;
+    var range = parseInt(range) + 1;
+
+    var url = "${pageContext.request.contextPath}/board/list_lost";
+    url = url + "?page=" + page;
+    url = url + "&range=" + range;
+
+    location.href = url;
+  }
 </script>
 
 
@@ -256,56 +291,35 @@ div.description {
 		</c:forEach>
 	</table>
 
-
-
-
-	<%-- <div class="container">
-		<div class="row">
-			<table id="list" width="90%">
-				<c:forEach items="${list}" var="u">
-					<div class="col-sm-4">
-						<div class="panel panel-primary">
-
-							<div class="panel-heading">${u.seq}</div>
-							<div class="panel-heading">${u.title}</div>
-							<div class="panel-body"
-								style="box-sizing: border-box; width: 300px; height: 300px;">
-								<img src=${u.photourl
-									}
-									style="box-sizing: border-box; width: 100%; height: 100%;" />
-							</div>
-							<div class="panel-footer">상품명 : ${u.category}</div>
-							<div class="panel-footer">가격 : ${u.writer}</div>
-							<div class="panel-footer"
-								style="box-sizing: border-box; height: 100px;">비고 :
-								${u.content}</div>
-							<div class="panel-footer">${u.regdate}</div>
-							<div class="panel-footer">
-								<div id="buttonArea">
-									<div id="editButton">
-										<a id="fontcolor" href="editform/${u.seq}">Edit</a>
-									</div>
-
-									<div id="deleteButton">
-										<a id="fontcolor" href="javascript:delete_ok('${u.seq}')">Delete</a>
-									</div>
-
-								</div>
-
-
-
-							</div>
-						</div>
-					</div>
-
-				</c:forEach>
-			</table>
-
-
-		</div>
-	</div>
- --%>
 	<br>
+	
+	<!-- pagination{s} -->
+
+	<div id="paginationBox"  align="center"">
+		<ul class="pagination">
+			<c:if test="${pagination.prev}">
+				<li class="page-item"><a class="page-link" href="#"
+					onClick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">Previous</a></li>
+			</c:if>
+
+
+			<c:forEach begin="${pagination.startPage}"
+				end="${pagination.endPage}" var="idx">
+				<li
+					class="page-item <c:out value="${pagination.page == idx ? 'active' : ''}"/> "><a
+					class="page-link" href="#"
+					onClick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')">
+						${idx} </a></li>
+			</c:forEach>
+
+			<c:if test="${pagination.next}">
+				<li class="page-item"><a class="page-link" href="#"
+					onClick="fn_next('${pagination.range}', '${pagination.range}', '${pagination.rangeSize}')">Next</a></li>
+			</c:if>
+		</ul>
+	</div>
+	<!-- pagination{e} -->
+	
 	<br>
 
 	<%@include file="./modules/footer.jsp"%>

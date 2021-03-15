@@ -266,16 +266,11 @@ div.description {
 				<div class="description">
 
 					<script>
-            var lf = $
-            {
-              u.lost
-            };
+            var lf = ${u.lost};
             if (lf)
-              document
-                  .write('<span style="background-color:#CBECBB; padding:1.5px 3px; border-radius: 3px;">Found</span>');
+              document.write('<span style="background-color:#CBECBB; padding:1.5px 3px; border-radius: 3px;">Found</span>');
             else
-              document
-                  .write('<span style="background-color:#F1CBC2; padding:1.5px 3px; border-radius: 3px;">Lost</span>');
+              document.write('<span style="background-color:#F1CBC2; padding:1.5px 3px; border-radius: 3px;">Lost</span>');
           </script>
 
 					<span class="title">${u.title}</span>

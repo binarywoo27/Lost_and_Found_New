@@ -62,17 +62,47 @@ public class BoardController {
 		return "list";
 	}
 
-//	@RequestMapping(value = "/list_found", method = RequestMethod.GET)
-//	public String boardlist_found(Model model) {
-//		model.addAttribute("list", boardService.getBoardList());
-//		return "list_found";
-//	}
-//
-//	@RequestMapping(value = "/list_lost", method = RequestMethod.GET)
-//	public String boardlist_lost(Model model) {
-//		model.addAttribute("list", boardService.getBoardList());
-//		return "list_lost";
-//	}
+	@RequestMapping(value = "/list_found", method = RequestMethod.GET)
+	public String boardlist_found(Model model, 
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "1") int range) throws Exception {
+		// 페이징 계산을 위해 Pagination 클래스에 보내야 할 파라미터에는 '현재 페이지'와 '현재 페이지 범위', 그리고 '게시물의 총
+		// 개수'가 있다.
+		
+		
+		System.out.println("DEBUG : Inside list_found!!!!");
+		
+		// 전체 게시글 개수
+		int listCnt = boardService.getBoardListFoundCnt();
+		System.out.println("DEBUG : Listcnt : " + listCnt);
+
+		// Pagination 객체생성
+		Pagination pagination = new Pagination();
+		pagination.pageInfo(page, range, listCnt);
+		
+		model.addAttribute("pagination", pagination);
+		model.addAttribute("list_found", boardService.getBoardListFound(pagination));
+		return "list_found";
+	}
+
+	@RequestMapping(value = "/list_lost", method = RequestMethod.GET)
+	public String boardlist_lost(Model model, 
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "1") int range) throws Exception {
+		// 페이징 계산을 위해 Pagination 클래스에 보내야 할 파라미터에는 '현재 페이지'와 '현재 페이지 범위', 그리고 '게시물의 총
+		// 개수'가 있다.
+
+		// 전체 게시글 개수
+		int listCnt = boardService.getBoardListLostCnt();
+
+		// Pagination 객체생성
+		Pagination pagination = new Pagination();
+		pagination.pageInfo(page, range, listCnt);
+		
+		model.addAttribute("pagination", pagination);
+		model.addAttribute("list_lost", boardService.getBoardListLost(pagination));
+		return "list_lost";
+	}
 
 	@RequestMapping(value = "/my_page", method = RequestMethod.GET)
 	public String myPage() {

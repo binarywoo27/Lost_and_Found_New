@@ -19,7 +19,6 @@
 	<select id="getBoard" resultType="board">
 		select * from LF_Product_Test where
 		seq=#{seq}
-	
 	</select>
 	
 	<select id="getBoardList" resultType="board">
@@ -29,17 +28,68 @@
 			LF_Product_Test 
 		LIMIT
 			#{startList}, #{listSize}
+			
+		<!-- order by seq desc -->
+	</select>
+	
+	<select id="getBoardListFound" resultType="board">
+		SELECT 
+			* 
+		FROM 
+			LF_Product_Test 
+	    WHERE
+	    	lost=1
+		LIMIT
+			#{startList}, #{listSize}
+			
+		<!-- order by seq desc -->
+	</select>
+	
+	<select id="getBoardListLost" resultType="board">
+		SELECT 
+			* 
+		FROM 
+			LF_Product_Test 
+	    WHERE
+	    	lost=0
+		LIMIT
+			#{startList}, #{listSize}
+			
 		<!-- order by seq desc -->
 	</select>
 	
 	<select id="getBoardListCnt" resultType="int">
 		SELECT
-			count(*) as listCnt <!-- 글(row)을 얻어올 때는 count() 라는 함수를 사용 -->
+			COUNT(*) as listCnt <!-- 글(row)을 얻어올 때는 count() 라는 함수를 사용 -->
 		FROM
 			LF_Product_Test
 			
-			<!-- 전체 글의 개수를 읽어와 전체 페이지의 수를 개산해야g 다. 따라서 전체 글의 개수를 읽어 오는 SQL문을 추가 다 -->
+			<!-- 전체 글의 개수를 읽어와 전체 페이지의 수를 개산해야한다. 따라서 전체 글의 개수를 읽어 오는 SQL문을 추가 다 -->
 
+	</select>
+	
+	<select id="getBoardListFoundCnt" resultType="int">
+		SELECT
+		    <!-- select count(*) from [order] where menuno = s.MENUNO -->
+			COUNT(*) as listCnt <!-- 글(row)을 얻어올 때는 count() 라는 함수를 사용 -->
+		FROM
+			LF_Product_Test
+		WHERE 
+			lost=1
+
+			<!-- 전체 글의 개수를 읽어와 전체 페이지의 수를 개산해야한다. 따라서 전체 글의 개수를 읽어 오는 SQL문을 추가 다 -->
+	</select>
+	
+	<select id="getBoardListLostCnt" resultType="int">
+		SELECT
+		    <!-- select count(*) from [order] where menuno = s.MENUNO -->
+			COUNT(*) as listCnt <!-- 글(row)을 얻어올 때는 count() 라는 함수를 사용 -->
+		FROM
+			LF_Product_Test
+		WHERE 
+			lost=0
+
+			<!-- 전체 글의 개수를 읽어와 전체 페이지의 수를 개산해야한다. 따라서 전체 글의 개수를 읽어 오는 SQL문을 추가 다 -->
 	</select>
 
 </mapper>
