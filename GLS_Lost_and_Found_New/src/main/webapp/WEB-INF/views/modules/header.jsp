@@ -61,7 +61,6 @@ body {
 							value=""> <input type=hidden name="stype" id="stype"
 							value="all">
 
-
 						<div
 							style="float: left; overflow: hidden; width: 100%; margin-left: 10px; background-color: #FFF;">
 							<input type="text" name="keyword" id="keyword"

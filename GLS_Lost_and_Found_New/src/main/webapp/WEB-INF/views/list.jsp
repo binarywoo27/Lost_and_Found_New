@@ -68,7 +68,7 @@
     url = url + "?page=" + page;
     url = url + "&range=" + range;
 
-    location.href = url;
+    location.href = url; 
   }
 </script>
 
@@ -93,6 +93,12 @@
 
 .panel-primary {
 	border-color: black;
+}
+
+.username {
+	position: fixed;
+	left: 1%;
+	padding-top: 1px;
 }
 
 #deleteButton {
@@ -160,97 +166,17 @@ div.description {
 
 </head>
 <script src="https://apis.google.com/js/platform.js?onload=init" async
-	defer></script>
-<script>
-  //auth2 is initialized with gapi.auth2.init() and a user is signed in.
-  function checkLoginStatus() {
-    var loginBtn = document.querySelector('#loginBtn');
-    var nameTxt = document.querySelector('#name');
-
-    if (gauth.isSignedIn.get()) {
-      console.log('logged in');
-      loginBtn.value = "Logout";
-      var profile = gauth.currentUser.get().getBasicProfile();
-      nameTxt.innerHTML = 'Welcome _$tag___' + profile.getName() + '_$tag____';
-    } else {
-      console.log('logged out');
-      loginBtn.value = 'Login';
-      nameTxt.innerHTML = '';
-    }
-  }
-
-  function init() {
-    console.log('init');
-    gapi
-        .load(
-            'auth2',
-            function() {
-              console.log('auth2');
-              window.gauth = gapi.auth2
-                  .init({
-                    client_id : '60396027837-iev9qsg4ud3cb4plotgs65c6co5q9si9.apps.googleusercontent.com'
-                  });
-
-              gauth.then(function() {
-                console.log("googleAuth success");
-                checkLoginStatus();
-
-                if (gauth.isSignedIn.get()) {
-                  var profile = gauth.currentUser.get().getBasicProfile();
-                  console.log('ID: ' + profile.getId());
-                  console.log('Full Name: ' + profile.getName());
-                  console.log('Given Name: ' + profile.getGivenName());
-                  console.log('Family Name: ' + profile.getFamilyName());
-                  console.log('Image URL: ' + profile.getImageUrl());
-                  console.log('Email: ' + profile.getEmail());
-                }
-              }, function() {
-                console.log("googleAuth fail");
-
-              });
-            });
-    /* document.addEventListener("DOMContentLoaded", function(event) { 
-      	document.getElementById("loginBtn").value = "Logout";
-    }); */
-    document.getElementById("loginBtn").value = "Logout";
-  }
-  /* function changeBtnValue(){
-   document.getElementById("loginBtn").value = "Logout";
-   } */
+	defer>
 </script>
-
-<body onload="changeBtnValue()">
-	<input type="button" id="loginBtn" value="checking..."
-		onclick="
-	if(this.value === 'Login'){
-		gauth.signIn().then(function(){
-			console.log('signed in');
-			checkLoginStatus();
-		});
-	} else {
-		gauth.signOut().then(function(){
-			console.log('signed out');
-			checkLoginStatus();
-			location.href = '../login/login';
-		});
-	}
-	
-">
+ 
+<body>
 
 	<span id="name"> </span>
-	<%
-		//out.write("<h1> hi there </h1>");
-	if (session.getAttribute("userid") == null) {
-		out.write("<location.href ='../login/login'>");
-		/* out.write("<h1> hi there </h1>"); */
-	} else {
-		String userid = (String) session.getAttribute("userid");
-		out.write("<span> welcome" + "<strong> " + userid + "</strong> </span>");
-	}
-	%>
+	
+	<span class="username"> welcome <strong> ${login.username} </strong> </span>
+	
 	<%@include file="./modules/header.jsp"%>
 	<%@include file="./modules/navbar.jsp"%>
-
 
 	<table id="list" width="90%">
 		<c:forEach items="${list}" var="u">
@@ -274,7 +200,7 @@ div.description {
           </script>
 
 					<span class="title">${u.title}</span>
-
+					
 					<div class="name">상품명 : ${u.category}</div>
 
 					<div class="price">가격 : ${u.writer}</div>
