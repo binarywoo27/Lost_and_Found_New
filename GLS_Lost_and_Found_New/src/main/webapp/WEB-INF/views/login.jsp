@@ -40,8 +40,25 @@ button {
 .g-signin2>div {
 	margin: 0 auto;
 }
-
+.google {
+	text-align: center;
+	position: relative;
+	height: 300px;
+	width: 400px;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	width: 400px;
+	left: 0;
+	right: 0;
+}
 </style>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+	crossorigin="anonymous">
 <meta name="google-signin-client_id"
 	content="60396027837-iev9qsg4ud3cb4plotgs65c6co5q9si9.apps.googleusercontent.com">
 </head>
@@ -77,27 +94,27 @@ function init(){
 					id="Found" style="font-size: 35px;">Found</span>
 			</h1>
 			<div>
-				<label>User Id: </label><input type='text' name='userid' />
+				<label>User Id: </label><input type='text' name='userid' value='a'/>
 			</div>
 			<br>
 			<div>
-				<label>Password: </label><input type='password' name='password' />
+				<label>Password: </label><input type='password' name='password' value='a'/>
 			</div>
 			<br>
 			<button type='submit'>회원 로그인</button>
-			
+
 		</form>
 
 	</div>
 
 	<br>
 
+	<div class="google">
+		<button type="button" onclick="location.href='google'">
+			<i class="fa fa-google" aria-hidden="true"></i> 구글 로그인
+		</button>
+	</div>
 
-	<span class="g-signin2" data-onsuccess="onSignIn"
-		data-scope="https://www.googleapis.com/auth/plus.login"
-		data-accesstype="offline"
-		data-redirecturi="http://localhost:8080/winter/login/oauth2callback"
-		style="display: inline;"></span>
 </body>
 
 </html>

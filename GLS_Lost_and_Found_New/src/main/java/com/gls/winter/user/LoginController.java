@@ -1,11 +1,13 @@
 package com.gls.winter.user;
 
-import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.social.google.connect.GoogleConnectionFactory;
 import org.springframework.social.oauth2.OAuth2Parameters;
 import org.springframework.stereotype.Controller;
@@ -13,17 +15,32 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import com.gls.winter.BoardService;
-import com.gls.winter.page.Pagination;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.gls.winter.user.model.GoogleOAuthRequest;
+import com.gls.winter.user.model.GoogleOAuthResponse;
 
 @Controller
 @RequestMapping(value = "/login")
 public class LoginController {
 	@Autowired
 	UserServiceImpl service;
-	@Autowired
-	BoardService boardService;
+	
+	final static String GOOGLE_AUTH_BASE_URL = "https://accounts.google.com/o/oauth2/v2/auth";
+	final static String GOOGLE_TOKEN_BASE_URL = "https://oauth2.googleapis.com/token";
+	final static String GOOGLE_REVOKE_TOKEN_BASE_URL = "https://oauth2.googleapis.com/revoke";
+	
+	@Value("${api.client_id}")
+	String clientId;
+	@Value("${api.client_secret}")
+	String clientSecret;
+	
 	@Autowired
 	private GoogleConnectionFactory googleConnectionFactory;
 	@Autowired
@@ -33,6 +50,11 @@ public class LoginController {
 //	public String login() {
 //		return "login";
 //	}
+	@RequestMapping(value="/google", method=RequestMethod.GET)
+	public String google(RedirectAttributes rttr, Model model) {
+		String url = "redirect:https://accounts.google.com/o/oauth2/v2/auth?client_id=60396027837-iev9qsg4ud3cb4plotgs65c6co5q9si9.apps.googleusercontent.com&redirect_uri=http://localhost:8080/winter/login/oauth2callback&response_type=code&scope=email%20profile%20openid&access_type=offline";
+		return url;
+	}
 	@RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
 	public String login(String t, Model model) {
 
@@ -48,24 +70,89 @@ public class LoginController {
 	}
 
 	// 구글 Callback호출 메소드
-	@RequestMapping(value = "/oauth2callback", method = RequestMethod.GET)
-	public String googleCallback(HttpSession session, Model model,
-			@RequestParam(required = false) HttpServletRequest request ) throws IOException {
-		System.out.println("googleCallback: Google login success");
+		@RequestMapping(value = "/oauth2callback", method = RequestMethod.GET)
+		public String googleAuth(Model model, @RequestParam(value = "code") String authCode, HttpServletRequest request,
+				HttpSession session, UserVO vo, RedirectAttributes redirectAttributes) throws Exception {
+			System.out.println("googleCallback: Google login success");
 
-		// 전체 게시글 개수
-		int listCnt = boardService.getBoardListCnt();
+			// HTTP Request를 위한 RestTemplate
+			RestTemplate restTemplate = new RestTemplate();
 
-		// Pagination 객체생성
-		Pagination pagination = new Pagination();
-		pagination.pageInfo(1, 1, listCnt);
+			// Google OAuth Access Token 요청을 위한 파라미터 세팅
+			GoogleOAuthRequest googleOAuthRequestParam = new GoogleOAuthRequest();
+			googleOAuthRequestParam.setClientId("60396027837-iev9qsg4ud3cb4plotgs65c6co5q9si9.apps.googleusercontent.com");
+			googleOAuthRequestParam.setClientSecret("cpEdqia-vtMSKvCFQYmrmnMe");
+			googleOAuthRequestParam.setCode(authCode);
+			googleOAuthRequestParam.setRedirectUri("http://localhost:8080/winter/login/oauth2callback");
+			googleOAuthRequestParam.setGrantType("authorization_code");
 
-		model.addAttribute("pagination", pagination);
-//		model.addAttribute("list", boardService.getBoardList());
-		model.addAttribute("list", boardService.getBoardList(pagination));
+			// JSON 파싱을 위한 기본값 세팅
+			// 요청시 파라미터는 스네이크 케이스로 세팅되므로 Object mapper에 미리 설정해준다.
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+			mapper.setSerializationInclusion(Include.NON_NULL);
 
-		return "list";
-	}
+			// AccessToken 발급 요청
+			ResponseEntity<String> resultEntity = restTemplate.postForEntity(GOOGLE_TOKEN_BASE_URL, googleOAuthRequestParam,
+					String.class);
+
+			// Token Request
+			GoogleOAuthResponse result = mapper.readValue(resultEntity.getBody(), new TypeReference<GoogleOAuthResponse>() {
+			});
+
+			// ID Token만 추출 (사용자의 정보는 jwt로 인코딩 되어있다)
+			String jwtToken = result.getIdToken();
+			String requestUrl = UriComponentsBuilder.fromHttpUrl("https://oauth2.googleapis.com/tokeninfo")
+					.queryParam("id_token", jwtToken).toUriString();
+
+			String resultJson = restTemplate.getForObject(requestUrl, String.class);
+
+			Map<String, String> userInfo = mapper.readValue(resultJson, new TypeReference<Map<String, String>>() {
+			});
+			model.addAllAttributes(userInfo);
+			model.addAttribute("token", result.getAccessToken()); // 토큰 token에 저장!!
+
+			UserVO checkvo = new UserVO();
+			
+			checkvo.setUserid(userInfo.get("email"));
+			checkvo.setEmail(userInfo.get("email"));
+			checkvo.setUsername(userInfo.get("family_name"));
+			System.out.println(userInfo.get("family_name"));
+			
+			String returnURL = "";
+			UserVO loginvo = service.getUser(checkvo); //로그인 체크하기 위해
+			
+			
+			if (session.getAttribute("login") != null) { // 이미 로그인 되어있는지
+				session.removeAttribute("login");
+			}
+			
+			if (loginvo != null) { // 로그인 성공. 이미 구글 id로 db에 저장됨
+				System.out.println("구글 ID로 로그인 성공!");
+				session.setAttribute("login", loginvo);
+				
+				returnURL = "redirect:/board/list";
+			} else { // 로그인 실패
+				System.out.println("구글 정보가 DB에 저장 안되어있음!");
+				if (service.insertUser(checkvo) == 0) {
+					System.out.println("구글 정보로 회원가입 실패! 왜일까?? ");
+					returnURL = "redirect:/login/login";
+				}
+				else {
+					System.out.println(checkvo.getUserid());
+					System.out.println("회원가입 성공!!!");
+					session.setAttribute("login", checkvo);
+					returnURL = "redirect:/board/list";
+				}
+			}
+			return returnURL;
+//			String username = request.getParameter("Given Name");
+////			String username = request.getParameter("username");
+//			
+////		session.setAttribute("userid", userid);
+//			session.setAttribute("username", username);
+
+		}
 
 	@RequestMapping(value = "/loginOk", method = RequestMethod.POST)
 	public String loginCheck(HttpSession session, UserVO vo, HttpServletRequest request) {
