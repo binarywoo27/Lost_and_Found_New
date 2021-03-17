@@ -59,8 +59,8 @@ nav {
 	<nav>
 		<ul>
 			<li><a class="nav-link" id="nav_a" href="list">전체</a></li>
-			<li><a class="nav-link" id="nav_a" href="list_found">Found</a></li>
-			<li><a class="nav-link" id="nav_a" href="list_lost">Lost</a></li>
+			<li><a class="nav-link" id="nav_a" href="list?lost=1">Found</a></li>
+			<li><a class="nav-link" id="nav_a" href="list?lost=0">Lost</a></li>
 		</ul>
 	</nav>
 	<hr style="margin-top: 0">

@@ -15,8 +15,10 @@ public class Pagination {
 	private int startPage;   // 범위 내 시작 페이지
 	private int startList;   // 게시판 시작 번호
 	private int endPage;     // 범위 내 끝 페이지 
+	private int lost;        // 1 - found / 0 - lost
 	private boolean prev;    // 이전 페이지
 	private boolean next;    // 다음 페이지
+	
 
 	public int getRangeSize() {
 		return rangeSize;
@@ -89,11 +91,22 @@ public class Pagination {
 	public int getStartList() {
 		return startList;
 	}
+	
+	public int getLost() {
+		return lost;
+	}
 
-	public void pageInfo(int page, int range, int listCnt) {
+	public void setLost(int lost) {
+		this.lost = lost;
+	}	
+	
+	
+	
+	public void pageInfo(int page, int range, int listCnt, int lost) {
 		this.page = page;         // 현재 페이지의 정보 
 		this.range = range;       // 현재 페이지 범위 정보
 		this.listCnt = listCnt;   // 게시물의 총 개수
+		this.lost = lost;         // 1 - found / 0 - lost / 2 - all
 		
 		//전체 페이지수 
 		// this.pageCnt = (int) Math.ceil(listCnt/listSize);
@@ -120,92 +133,5 @@ public class Pagination {
 		}
 	}
 
-	
-//	private int pageSize = 10;  /** 한 페이지당 게시글 수 **/
-//	private int rangeSize = 10; /** 한 블럭(range)당 페이지 수 **/
-//	private int curPage = 1;    /** 현재 페이지 **/
-//	private int curRange = 1;   /** 현재 블럭(range) **/
-//	private int listCnt;        /** 총 게시글 수 **/
-//	private int pageCnt;        /** 총 페이지 수 **/
-//	private int rangeCnt;       /** 총 블럭(range) 수 **/	
-//	private int startPage = 1;  /** 시작 페이지 **/
-//	private int endPage = 1;    /** 끝 페이지 **/	
-//	private int startIndex = 0; /** 시작 index **/
-//	private int prevPage;       /** 이전 페이지 **/
-//	private int nextPage;       /** 다음 페이지 **/
-//	
-//	public int getPageSize() {
-//		return pageSize;
-//	}
-//	public void setPageSize(int pageSize) {
-//		this.pageSize = pageSize;
-//	}
-//	public int getRangeSize() {
-//		return rangeSize;
-//	}
-//	public void setRangeSize(int rangeSize) {
-//		this.rangeSize = rangeSize;
-//	}
-//	public int getCurPage() {
-//		return curPage;
-//	}
-//	public void setCurPage(int curPage) {
-//		this.curPage = curPage;
-//	}
-//	public int getCurRange() {
-//		return curRange;
-//	}
-//	public void setCurRange(int curRange) {
-//		this.curRange = curRange;
-//	}
-//	public int getListCnt() {
-//		return listCnt;
-//	}
-//	public void setListCnt(int listCnt) {
-//		this.listCnt = listCnt;
-//	}
-//	public int getPageCnt() {
-//		return pageCnt;
-//	}
-//	public void setPageCnt(int pageCnt) {
-//		this.pageCnt = pageCnt;
-//	}
-//	public int getRangeCnt() {
-//		return rangeCnt;
-//	}
-//	public void setRangeCnt(int rangeCnt) {
-//		this.rangeCnt = rangeCnt;
-//	}
-//	public int getStartPage() {
-//		return startPage;
-//	}
-//	public void setStartPage(int startPage) {
-//		this.startPage = startPage;
-//	}
-//	public int getEndPage() {
-//		return endPage;
-//	}
-//	public void setEndPage(int endPage) {
-//		this.endPage = endPage;
-//	}
-//	public int getStartIndex() {
-//		return startIndex;
-//	}
-//	public void setStartIndex(int startIndex) {
-//		this.startIndex = startIndex;
-//	}
-//	public int getPrevPage() {
-//		return prevPage;
-//	}
-//	public void setPrevPage(int prevPage) {
-//		this.prevPage = prevPage;
-//	}
-//	public int getNextPage() {
-//		return nextPage;
-//	}
-//	public void setNextPage(int nextPage) {
-//		this.nextPage = nextPage;
-//	}
-	
 	
 }

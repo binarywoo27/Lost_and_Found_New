@@ -18,6 +18,7 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="${path}/resources/css/list_style.css">
 
 <script>
   function delete_ok(id) {
@@ -39,124 +40,44 @@
   </c:if> // 삭제 메세지 처리
 
   //이전 버튼 이벤트
-  function fn_prev(page, range, rangeSize) {
+  function fn_prev(page, range, rangeSize, lost) {
     var page = ((range - 2) * rangeSize) + 1;
     var range = range - 1;
 
     var url = "${pageContext.request.contextPath}/board/list";
     url = url + "?page=" + page;
     url = url + "&range=" + range;
+    url = url + "&lost=" + lost;
 
     location.href = url;
   }
 
   //페이지 번호 클릭
-  function fn_pagination(page, range, rangeSize, searchType, keyword) {
+  function fn_pagination(page, range, rangeSize, lost, searchType, keyword) {
     var url = "${pageContext.request.contextPath}/board/list"
     url = url + "?page=" + page;
     url = url + "&range=" + range;
+    url = url + "&lost=" + lost;
+    
 
     location.href = url;
   }
 
   //다음 버튼 이벤트
-  function fn_next(page, range, rangeSize) {
+  function fn_next(page, range, rangeSize, lost) {
     var page = parseInt((range * rangeSize)) + 1;
     var range = parseInt(range) + 1;
 
     var url = "${pageContext.request.contextPath}/board/list";
     url = url + "?page=" + page;
     url = url + "&range=" + range;
+    url = url + "&lost=" + lost;
 
     location.href = url;
   }
 </script>
 
 
-<style>
-#editButton {
-	width: 80px;
-	margin: auto;
-	color: white;
-	border: 1px #81BEF7;
-	background: white;
-	padding: 5px 5px;
-	text-align: center;
-	font-weight: bold;
-	display: inline-block;
-}
-
-.panel-primary>.panel-heading {
-	background-color: darkslategray;
-	border-color: white;
-}
-
-.panel-primary {
-	border-color: black;
-}
-
-#deleteButton {
-	width: 80px;
-	margin: auto;
-	border: 1px #E2A9F3;
-	background: lightgrey;
-	padding: 5px 5px;
-	text-align: center;
-	font-weight: bold;
-	display: inline-block;
-}
-
-#buttonArea {
-	text-align: center;
-	padding: 10px;
-}
-
-div.card {
-	width: 95%;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
-		rgba(0, 0, 0, 0.19);
-	text-align: left;
-	margin: 14px;
-	position: relative;
-	float: left;
-}
-
-div.header {
-	background-color: #4CAF50;
-	color: white;
-	padding: 10px;
-	font-size: 40px;
-}
-
-div.description {
-	padding: 10px;
-}
-
-#desc1 {
-	font-size: 20px;
-	text-align: left;
-	font-weight: 700;
-	padding-left: 5%;
-}
-
-@media only screen and (min-width: 520px) {
-	div.card {
-		width: 44%;
-	}
-}
-
-@media only screen and (min-width: 768px) {
-	div.card {
-		width: 29%;
-	}
-}
-
-@media only screen and (min-width: 1024px) {
-	div.card {
-		width: 22%;
-	}
-}
-</style>
 
 </head>
 <script src="https://apis.google.com/js/platform.js?onload=init" async
@@ -248,11 +169,14 @@ div.description {
 		out.write("<span> welcome" + "<strong> " + userid + "</strong> </span>");
 	}
 	%>
+	
+	
 	<%@include file="./modules/header.jsp"%>
 	<%@include file="./modules/navbar.jsp"%>
 
-
-	<table id="list" width="90%">
+	
+	<div id="list_area">
+	<table id="list" width="100%">
 		<c:forEach items="${list}" var="u">
 
 			<div class="card">
@@ -264,7 +188,9 @@ div.description {
 						style="box-sizing: border-box; width: 100%; height: 230px" />
 				</div>
 				<div class="description">
-
+				
+				
+				
 					<script>
             var lf = ${u.lost};
             if (lf)
@@ -301,56 +227,10 @@ div.description {
 			</div>
 		</c:forEach>
 	</table>
-
-
-
-
-	<%-- <div class="container">
-		<div class="row">
-			<table id="list" width="90%">
-				<c:forEach items="${list}" var="u">
-					<div class="col-sm-4">
-						<div class="panel panel-primary">
-
-							<div class="panel-heading">${u.seq}</div>
-							<div class="panel-heading">${u.title}</div>
-							<div class="panel-body"
-								style="box-sizing: border-box; width: 300px; height: 300px;">
-								<img src=${u.photourl
-									}
-									style="box-sizing: border-box; width: 100%; height: 100%;" />
-							</div>
-							<div class="panel-footer">상품명 : ${u.category}</div>
-							<div class="panel-footer">가격 : ${u.writer}</div>
-							<div class="panel-footer"
-								style="box-sizing: border-box; height: 100px;">비고 :
-								${u.content}</div>
-							<div class="panel-footer">${u.regdate}</div>
-							<div class="panel-footer">
-								<div id="buttonArea">
-									<div id="editButton">
-										<a id="fontcolor" href="editform/${u.seq}">Edit</a>
-									</div>
-
-									<div id="deleteButton">
-										<a id="fontcolor" href="javascript:delete_ok('${u.seq}')">Delete</a>
-									</div>
-
-								</div>
-
-
-
-							</div>
-						</div>
-					</div>
-
-				</c:forEach>
-			</table>
-
-
-		</div>
+	
 	</div>
- --%>
+	
+
 	<br>
 
 	<!-- pagination{s} -->
@@ -359,7 +239,7 @@ div.description {
 		<ul class="pagination">
 			<c:if test="${pagination.prev}">
 				<li class="page-item"><a class="page-link" href="#"
-					onClick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">Previous</a></li>
+					onClick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${pagination.lost}')">Previous</a></li>
 			</c:if>
 
 
@@ -368,13 +248,13 @@ div.description {
 				<li
 					class="page-item <c:out value="${pagination.page == idx ? 'active' : ''}"/> "><a
 					class="page-link" href="#"
-					onClick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')">
+					onClick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}', '${pagination.lost}')">
 						${idx} </a></li>
 			</c:forEach>
 
 			<c:if test="${pagination.next}">
 				<li class="page-item"><a class="page-link" href="#"
-					onClick="fn_next('${pagination.range}', '${pagination.range}', '${pagination.rangeSize}')">Next</a></li>
+					onClick="fn_next('${pagination.range}', '${pagination.range}', '${pagination.rangeSize}', '${pagination.lost}')">Next</a></li>
 			</c:if>
 		</ul>
 	</div>

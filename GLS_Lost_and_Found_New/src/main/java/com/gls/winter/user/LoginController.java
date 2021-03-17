@@ -58,7 +58,7 @@ public class LoginController {
 
 		// Pagination 객체생성
 		Pagination pagination = new Pagination();
-		pagination.pageInfo(1, 1, listCnt);
+		pagination.pageInfo(1, 1, listCnt, 2);
 
 		model.addAttribute("pagination", pagination);
 //		model.addAttribute("list", boardService.getBoardList());
