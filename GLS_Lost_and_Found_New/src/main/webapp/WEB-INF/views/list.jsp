@@ -68,7 +68,7 @@
     url = url + "?page=" + page;
     url = url + "&range=" + range;
 
-    location.href = url;
+    location.href = url; 
   }
 </script>
 
