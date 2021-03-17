@@ -19,7 +19,7 @@ function changeformat(){
   
 }
 </script>
-    <!-- <p>test</p> -->
+    <!-- <p>test1</p> -->
 	<h1>새 물품 등록하기</h1>
 	<form:form commandName="vo" action="addok" method="post" enctype="multipart/form-data">
 		<table id="list">
