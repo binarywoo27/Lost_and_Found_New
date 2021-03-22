@@ -47,25 +47,7 @@ public class LoginController {
 		return "login";
 	}
 
-	// 구글 Callback호출 메소드
-//	@RequestMapping(value = "/oauth2callback", method = RequestMethod.GET)
-//	public String googleCallback(HttpSession session, Model model,
-//			@RequestParam(required = false) HttpServletRequest request ) throws IOException {
-//		System.out.println("googleCallback: Google login success");
-//
-//		// 전체 게시글 개수
-//		int listCnt = boardService.getBoardListCnt();
-//
-//		// Pagination 객체생성
-//		Pagination pagination = new Pagination();
-//		pagination.pageInfo(1, 1, listCnt, 2);
-//
-//		model.addAttribute("pagination", pagination);
-////		model.addAttribute("list", boardService.getBoardList());
-//		model.addAttribute("list", boardService.getBoardList(pagination));
-//
-//		return "list";
-//	}
+	
 
 	@RequestMapping(value = "/loginOk", method = RequestMethod.POST)
 	public String loginCheck(HttpSession session, UserVO vo, HttpServletRequest request) {
