@@ -73,96 +73,7 @@
 </script>
 
 
-<style>
-#editButton {
-	width: 80px;
-	margin: auto;
-	color: white;
-	border: 1px #81BEF7;
-	background: white;
-	padding: 5px 5px;
-	text-align: center;
-	font-weight: bold;
-	display: inline-block;
-}
 
-.panel-primary>.panel-heading {
-	background-color: darkslategray;
-	border-color: white;
-}
-
-.panel-primary {
-	border-color: black;
-}
-
-.username {
-	position: fixed;
-	left: 1%;
-	padding-top: 1px;
-}
-
-#deleteButton {
-	width: 80px;
-	margin: auto;
-	border: 1px #E2A9F3;
-	background: lightgrey;
-	padding: 5px 5px;
-	text-align: center;
-	font-weight: bold;
-	display: inline-block;
-}
-
-#buttonArea {
-	text-align: center;
-	padding: 10px;
-}
-
-div.card {
-	width: 95%;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
-		rgba(0, 0, 0, 0.19);
-	text-align: left;
-	margin: 14px;
-	position: relative;
-	float: left;
-}
-
-div.header {
-	background-color: #4CAF50;
-	color: white;
-	padding: 10px;
-	font-size: 40px;
-}
-
-div.description {
-	padding: 10px;
-}
-
-#desc1 {
-	font-size: 20px;
-	text-align: left;
-	font-weight: 700;
-	padding-left: 5%;
-}
-
-@media only screen and (min-width: 520px) {
-	div.card {
-		width: 44%;
-	}
-}
-
-@media only screen and (min-width: 768px) {
-	div.card {
-		width: 29%;
-	}
-}
-
-@media only screen and (min-width: 1024px) {
-	div.card {
-		width: 22%;
-	}
-}
-</style>
 
 </head>
 <script src="https://apis.google.com/js/platform.js?onload=init" async
@@ -178,7 +89,8 @@ div.description {
 	<%@include file="./modules/header.jsp"%>
 	<%@include file="./modules/navbar.jsp"%>
 
-	<table id="list" width="90%">
+	<div id="list_area">
+	<table id="list" width="100%">
 		<c:forEach items="${list}" var="u">
 
 			<div class="card">
@@ -227,6 +139,8 @@ div.description {
 			</div>
 		</c:forEach>
 	</table>
+	
+	</div>
 
 
 
