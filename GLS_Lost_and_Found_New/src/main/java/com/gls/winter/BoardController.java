@@ -38,11 +38,13 @@ public class BoardController {
 	public String mylist() {
 		return "mylist";
 	}
+	
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String boardlist(Model model, 
 			@RequestParam(required = false, defaultValue = "1") int page,
 			@RequestParam(required = false, defaultValue = "1") int range, 
+			@RequestParam(required = false, defaultValue = "2") int lost,
 			@RequestParam(required = false, defaultValue = "title") String searchType,
 			@RequestParam(required = false) String keyword )
 			throws Exception {
@@ -53,63 +55,82 @@ public class BoardController {
 		search.setSearchType(searchType);
 		search.setKeyword(keyword);
 		
+		int listCnt = 2;
 		// 전체 게시글 개수
-		int listCnt = boardService.getBoardListCnt(search);
+		if (lost == 2) { // 전체 게시물
+			listCnt = boardService.getBoardListCnt(search);
+		} else if (lost == 1) { // Found 게시물
+			listCnt = boardService.getBoardListFoundCnt();
+		} else if (lost == 0) { // Lost 게시물
+			listCnt = boardService.getBoardListLostCnt();
+		}
 		
-		search.pageInfo(page, range, listCnt);
+		search.pageInfo(page, range, listCnt, lost);
 	
 		// Pagination 객체생성 // 2021.3.18 (진우) : search 객체를 위에서 생성했기 때문에 없앤다고 한다. 
 //		Pagination pagination = new Pagination();
 //		pagination.pageInfo(page, range, listCnt);
 		
-		model.addAttribute("pagination", search);
-		model.addAttribute("list", boardService.getBoardList(search));
+		// Pagination 객체생성
+		Pagination pagination = new Pagination();
+		pagination.pageInfo(page, range, listCnt, lost);
+		model.addAttribute("pagination", pagination);
+		
+		if(lost == 2) {
+			model.addAttribute("list", boardService.getBoardList(search));
+		}
+		else if(lost==1) {
+			model.addAttribute("list", boardService.getBoardListFound(pagination));
+		}
+		else if(lost==0) {
+			model.addAttribute("list", boardService.getBoardListLost(pagination));
+		}
 		return "list";
 	}
 
-	@RequestMapping(value = "/list_found", method = RequestMethod.GET)
-	public String boardlist_found(Model model, 
-			@RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "1") int range) throws Exception {
-		// 페이징 계산을 위해 Pagination 클래스에 보내야 할 파라미터에는 '현재 페이지'와 '현재 페이지 범위', 그리고 '게시물의 총
-		// 개수'가 있다.
-		
-		System.out.println("DEBUG : Inside list_found!!!");
-		
-		// 전체 게시글 개수
-		int listCnt_found = boardService.getBoardListFoundCnt();
-		System.out.println("DEBUG : listCnt_found : " + listCnt_found);
-
-		// Pagination 객체생성
-		Pagination pagination_found = new Pagination();
-		pagination_found.pageInfo(page, range, listCnt_found);
-		
-		model.addAttribute("pagination", pagination_found);
-		model.addAttribute("list_found", boardService.getBoardListFound(pagination_found));
-		return "list_found";
-	}
-
-	@RequestMapping(value = "/list_lost", method = RequestMethod.GET)
-	public String boardlist_lost(Model model, 
-			@RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "1") int range) throws Exception {
-		// 페이징 계산을 위해 Pagination 클래스에 보내야 할 파라미터에는 '현재 페이지'와 '현재 페이지 범위', 그리고 '게시물의 총
-		// 개수'가 있다.
-		
-		System.out.println("DEBUG : Inside list_lost!!!!");
-
-		// 전체 게시글 개수
-		int listCnt_lost = boardService.getBoardListLostCnt();
-
-		// Pagination 객체생성
-		Pagination pagination_lost = new Pagination();
-		pagination_lost.pageInfo(page, range, listCnt_lost);
-		System.out.println("DEBUG : listcnt_lost : " + listCnt_lost);
-		
-		model.addAttribute("pagination", pagination_lost);
-		model.addAttribute("list_lost", boardService.getBoardListLost(pagination_lost));
-		return "list_lost";
-	}
+//	@RequestMapping(value = "/list_found", method = RequestMethod.GET)
+//	public String boardlist_found(Model model, 
+//			@RequestParam(required = false, defaultValue = "1") int page,
+//			@RequestParam(required = false, defaultValue = "1") int range) throws Exception {
+//		// 페이징 계산을 위해 Pagination 클래스에 보내야 할 파라미터에는 '현재 페이지'와 '현재 페이지 범위', 그리고 '게시물의 총
+//		// 개수'가 있다.
+//		
+//		System.out.println("DEBUG : Inside list_found!!!");
+//		
+//		// 전체 게시글 개수
+//		int listCnt_found = boardService.getBoardListFoundCnt();
+//		System.out.println("DEBUG : listCnt_found : " + listCnt_found);
+//
+//		// Pagination 객체생성
+//		Pagination pagination_found = new Pagination();
+//		pagination_found.pageInfo(page, range, listCnt_found);
+//		
+//		model.addAttribute("pagination", pagination_found);
+//		model.addAttribute("list_found", boardService.getBoardListFound(pagination_found));
+//		return "list_found";
+//	}
+//
+//	@RequestMapping(value = "/list_lost", method = RequestMethod.GET)
+//	public String boardlist_lost(Model model, 
+//			@RequestParam(required = false, defaultValue = "1") int page,
+//			@RequestParam(required = false, defaultValue = "1") int range) throws Exception {
+//		// 페이징 계산을 위해 Pagination 클래스에 보내야 할 파라미터에는 '현재 페이지'와 '현재 페이지 범위', 그리고 '게시물의 총
+//		// 개수'가 있다.
+//		
+//		System.out.println("DEBUG : Inside list_lost!!!!");
+//
+//		// 전체 게시글 개수
+//		int listCnt_lost = boardService.getBoardListLostCnt();
+//
+//		// Pagination 객체생성
+//		Pagination pagination_lost = new Pagination();
+//		pagination_lost.pageInfo(page, range, listCnt_lost);
+//		System.out.println("DEBUG : listcnt_lost : " + listCnt_lost);
+//		
+//		model.addAttribute("pagination", pagination_lost);
+//		model.addAttribute("list_lost", boardService.getBoardListLost(pagination_lost));
+//		return "list_lost";
+//	}
 
 	@RequestMapping(value = "/my_page", method = RequestMethod.GET)
 	public String myPage() {
